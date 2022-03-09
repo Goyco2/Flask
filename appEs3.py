@@ -6,7 +6,8 @@
 #l'utente sceglie se avere la regioneo capoluogho selezionando un radio button 
 from flask import Flask, render_template, request
 app = Flask(__name__)
-CapolughiRegione = []
+lista = []
+lista.append({'Valle Aosta' : "Aosta", "Piemonte" : "Torino", "Liguria" : "Genova", "Lombardia" : "Milano", "Trentino-Alto Adige" : "Trento", "Veneto" : "Venezia", "Friuli-Venezia Giulia" : "Trieste", "Emilia-Romagna" : "Bologna","Toscana" : "Firenze","Marche" : "Ancona","Lazio" : "Roma","Umbria" : "Perugia","Abruzzo" : "L'Aquila","Molise" : "Campobasso","Campania" : "Napoli","Puglia" : "Bari","Basilicata" : "Potenza","Calabria" : "Catanzaro","Sicilia" :"Palermo","Sardegna" : "Cagliari"})
 @app.route('/', methods=['GET'])
 def hello_world():
     return render_template("datiIta.html")
@@ -17,11 +18,13 @@ def Data():
     print(request.args)
     name = request.args['name']
     regCap = request.args['regCap']
+    
 
-
-
-#lista.append({'Valle Aosta' : "Aosta", "Piemonte" : "Torino", "Liguria" : "Genova", "Lombardia" : "Milano", "Trentino-Alto Adige" : "Trento", "Veneto" : "Venezia", "Friuli-Venezia Giulia" : "Trieste", "Emilia-Romagna" : "Bologna","Toscana" : "Firenze","Marche" : "Ancona","Lazio" : "Roma","Umbria" : "Perugia","Abruzzo" : "L'Aquila","Molise" : "Campobasso","Campania" : "Napoli","Puglia" : "Bari","Basilicata" : "Potenza","Calabria" : "Catanzaro","Sicilia" :"Palermo","Sardegna" : "Cagliari"})
-
+@app.route("/Risposta", methods=["GET"])
+def Risposta():
+    ris = request.args['ris']
+    for utente in lista:
+        if utente[]
 
 
 if __name__ == '__main__':
