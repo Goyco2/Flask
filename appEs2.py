@@ -6,26 +6,40 @@
 from flask import Flask, render_template, request
 app = Flask(__name__)
 
+lista = []
 @app.route('/', methods=['GET'])
 def hello_world():
     return render_template("datiLogin.html")
 
 @app.route('/data', methods=['GET'])
 def Data():
+    print(request.args)
     name = request.args['name']
     psw = request.args['psw']
     username = request.args['username']
     VerPass = request.args['Verificapassword']
     Sex = request.args['Sex']
     if psw == VerPass:
-        utente = {'name': name, 'psw':psw, 'username':username, 'Sex':Sex}
-        lst.append(utente)
-        if name =='' or psw =='' or username == ''or se == ''or VerPass == '':
-            return render_template("Sbagliato.html")
-        elif Sex == 'M':
-            return render_template("GiustoM.html",nome=name)
-        elif Sex =='F':
-            return render_template("GiustoF.html",nome=name)
+        lista.append({"name" : name, "username" : username, "Sex" : Sex, "psw" : psw})
+        return render_template('es2login.html')
+    else:
+        return render_template('Sbagliato.html')
+
+@app.route("/log", methods=["GET"])
+def login():
+    psw_log = request.args['psw']
+    username_log = request.args['username']
+    for utente in lista:
+        if utente['username'] == username_log and utente['psw'] == psw_log:
+            if utente['Sex'] == 'M':
+                return render_template("welcome.html",nome=utente['name'])
+            elif utente['Sex'] == 'M':
+                return render_template("welcomeses2.html",nome=utente['name'])
+            else:
+                return render_template("benvent*.html",nome=utente['name'])
+
+    return render_template("Sbagliato.html", mesaggio='username o password sbagliato')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3245, debug=True)
