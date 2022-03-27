@@ -1,6 +1,5 @@
-#realizare un sito web che restituisca la mappa dei quartieri di milano.
-#ci deve essere una home page con un link "quartieri di mialno":
-#cilccando su questo link si devev visualizzare la mappa dei quartieri di milano
+#Realizzare un sito web che restituisca la mappa dei quartieri di Milano.
+#Ci deve essere una homepage con un link "quartieri di milano": cliccando su questo link si deve visualizzare la mappa dei quartieri di Milano.
 from flask import Flask, render_template, request, send_file, make_response, url_for, Response
 app = Flask(__name__)
 import io
@@ -13,6 +12,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 milano = geopandas.read_file("/workspace/Flask/ds964_nil_wm")
+fontanelle = geopandas.read_file("/workspace/Flask/Fontanelle")
 
 
 @app.route('/', methods=['GET'])
@@ -63,6 +63,7 @@ def pngQuartiere():
 
 @app.route('/scelta', methods=("POST", "GET"))
 def scegli():
+    global quart
     quart = milano.NIL
     return render_template('scelta_quartieri.html', quartiere = quart)
 
@@ -84,9 +85,32 @@ def dropdown():
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
-@app.route('/Fontanelle.png', methods=['GET'])
-def Fontanelle():
-    
+
+@app.route("/fontanelle", methods=["GET"])
+def fontanelle1():
+    quart = milano.NIL
+    return render_template("fontanelle.html", quartieri = quart)
+
+@app.route('/fontanelleris', methods=("POST", "GET"))
+def fontanelleRis():
+    global map_quart, font_quart
+    user_input = request.args["Quartiere"]
+    map_quart = milano[milano["NIL"] == user_input]
+    font_quart = fontanelle[fontanelle.within(map_quart.geometry.squeeze())]
+    return render_template('fontanelleRis.html', tabella = font_quart.to_html())
+
+
+@app.route("/fontanelle.png", methods=["GET"])
+def png_fontanelle():
+    fig, ax = plt.subplots(figsize = (12,8))
+
+    map_quart.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor="k")
+    font_quart.to_crs(epsg=3857).plot(ax=ax, color = "r")
+    contextily.add_basemap(ax=ax)   
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
 
 if __name__ == '__main__':
