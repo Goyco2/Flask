@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-tram_bus = geopandas.read_file("/workspace/Flask/VerificaC/ds964_nil_wm/NIL_WM.dbf")
-milano = geopandas.read_file("/workspace/Flask/VerificaC/tpl_percorsi_shp (2).zip")
+tram_bus = geopandas.read_file("/workspace/Flask/VerificaC/tpl_percorsi_shp (2).zip")
+milano = geopandas.read_file("/workspace/Flask/VerificaC/ds964_nil_wm/NIL_WM.dbf")
 
 @app.route('/', methods=['GET'])
 def home():
